@@ -10,9 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.plaf.basic.BasicSplitPaneUI.BasicHorizontalLayoutManager;
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -31,20 +34,31 @@ public class MiniGUI {
     /**
      * 
      */
-    public MiniGUI() {
+    public MiniGUI() { 
         final JPanel canvas = new JPanel();
         canvas.setLayout(new BorderLayout());
-        final JButton write = new JButton("Print a random number on standard output");
-        canvas.add(write, BorderLayout.CENTER);
+
+        final JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
+
+        final JButton myButton = new JButton("This is my JButton");
+        myPanel.add(myButton);
+        canvas.add(myPanel, BorderLayout.CENTER);
+
+        final JTextField myTextF = new JTextField("Test");
+        canvas.add(myTextF, BorderLayout.NORTH);
+
         frame.setContentPane(canvas);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         /*
          * Handlers
          */
-        write.addActionListener(new ActionListener() {
+        myButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                System.out.println(rng.nextInt());
+                final int value = rng.nextInt();
+                myTextF.setText(Integer.toString(value));
+                System.out.println(value);
             }
         });
     }
@@ -71,6 +85,7 @@ public class MiniGUI {
         /*
          * OK, ready to pull the frame onscreen
          */
+        frame.pack();
         frame.setVisible(true);
     }
 

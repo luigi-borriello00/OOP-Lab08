@@ -1,10 +1,14 @@
 package it.unibo.oop.lab.mvcio;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
 /**
  * 
  */
 public class Controller {
-
+    static final String PATH = System.getProperty("user.home") + System.getProperty("file.separator");
     /*
      * This class must implement a simple controller responsible of I/O access. It
      * considers a single file at a time, and it is able to serialize objects in it.
@@ -27,5 +31,37 @@ public class Controller {
      * System.getProperty("file.separator"). The combined use of those methods leads
      * to a software that runs correctly on every platform.
      */
+    private File file;
 
+    public Controller() {
+        this.file = new File(Controller.PATH + "output.txt");
+    }
+/**
+ *      This method set a new File as a current file
+ *
+ *      @param newFilePath 
+ *              the path of the new File.
+ * 
+ * 
+ * */
+    public void setFile(final String newFilePath) {
+        this.file = new File(newFilePath);
+    }
+
+    public String getFile() {
+        return this.file.getName();
+    }
+
+    public String getPath() {
+        return this.file.getPath();
+    }
+
+    public void writeOnFile(final String textToWrite) throws FileNotFoundException {
+        try (PrintStream ps = new PrintStream(file.getPath())) {
+           ps.print(textToWrite);
+        }
+        catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

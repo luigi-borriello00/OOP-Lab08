@@ -1,0 +1,5 @@
+Starting the game...
+Result: Your number is too high
+Error: number INCORRECT
+Result: You won
+Result: Your number is too low

@@ -1,9 +1,16 @@
 package it.unibo.oop.lab.mvc;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  * A very simple program using a graphical interface.
@@ -53,13 +60,57 @@ public final class SimpleGUI {
         final int sw = (int) screen.getWidth();
         final int sh = (int) screen.getHeight();
         frame.setSize(sw / 2, sh / 2);
-
+        final ControllerImpl controller = new ControllerImpl();
         /*
          * Instead of appearing at (0,0), upper left corner of the screen, this
          * flag makes the OS window manager take care of the default positioning
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        final JPanel mainPanel = new JPanel();
+        final JPanel buttonPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        buttonPanel.setLayout(new BorderLayout());
+        final JTextField textField = new JTextField();
+      //  textField.setEditable(false);
+        final JTextArea textArea = new JTextArea();
+        final JButton print = new JButton("Print");
+        final JButton showHistory = new JButton("Show history");
+        mainPanel.add(textField, BorderLayout.NORTH);
+        mainPanel.add(textArea, BorderLayout.CENTER);
+        buttonPanel.add(print, BorderLayout.WEST);
+        buttonPanel.add(showHistory, BorderLayout.EAST);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        frame.setContentPane(mainPanel);
+        frame.setVisible(true); 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        /*      Adding the Listeners    */
+        print.addActionListener(new ActionListener() {
+
+            public void actionPerformed(final ActionEvent e) {
+                controller.setNextString(textField.getText());
+                System.out.println(controller.getNextString());
+
+            }
+        });
+        showHistory.addActionListener(e -> {
+            String allString = "";
+            boolean first = true;
+            for (final String x : controller.getHistory()) {
+                if (first) {
+                    allString += x;
+                    first = false;
+                }
+                else {
+                allString += "\n" + x;
+                }
+            }
+            textArea.setText(allString);
+        });
+    }
+    public static void main(final String... args) {
+        final SimpleGUI test = new SimpleGUI();
     }
 
 }

@@ -1,9 +1,18 @@
 package it.unibo.oop.lab.mvcio;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
+import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  * A very simple program using a graphical interface.
@@ -36,6 +45,9 @@ public final class SimpleGUI {
     /**
      * builds a new {@link SimpleGUI}.
      */
+    public static void main(final String... args) {
+        final SimpleGUI test = new SimpleGUI();
+    }
     public SimpleGUI() {
         /*
          * Make the frame half the resolution of the screen. This very method is
@@ -57,6 +69,31 @@ public final class SimpleGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        final JPanel mainPanel = new JPanel();
+        final JTextArea textArea = new JTextArea();
+        final JButton button = new JButton("Save");
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.add(textArea, BorderLayout.CENTER);
+        mainPanel.add(button, BorderLayout.SOUTH);
+        final Controller ioController = new Controller();
+
+        button.addActionListener(new ActionListener() {
+
+            public void actionPerformed(final ActionEvent e) {
+                final int n = JOptionPane.showConfirmDialog(mainPanel, "Salvare ?", "Conferma", JOptionPane.YES_OPTION);
+                if (n == JOptionPane.YES_OPTION) {
+                    try {
+                        ioController.writeOnFile(textArea.getText());
+                    } catch (FileNotFoundException e1) {
+                        JOptionPane.showMessageDialog(mainPanel, "File non trovato KTM");
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+        frame.setContentPane(mainPanel);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
 }
